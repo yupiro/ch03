@@ -45,7 +45,24 @@ function downloadRec(url, level) {
         if (url.substr(url.length-1,1) == '/'){
             url += "index.html"; //インデックスを自動追加
         }
+        var savepath = url.split("/").slice(2).join("/");
+        checkSaveDir(savepath);
+        console.log(savepath);
+        fs.writeFileSync(savepath, $.html());
+    });
+}
 
-    })
-
+// 保存先のデイレクトリが存在するか確認
+function checkSaveDir(fname) {
+    // ディレクトリ部分だけ取り出す
+    var dir = path.dirname(fname);
+    // ディレクトリを再帰的に作成する
+    var dirlist = dir.split("/");
+    var p = "";
+    for (var i in dirlist) {
+        p += dirlist[i] + "/";
+        if (!fs.exsitsSync(p)) {
+            fs.mkdirSync(p);
+        }
+    }
 }
